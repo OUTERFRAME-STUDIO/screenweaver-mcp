@@ -1,0 +1,11 @@
+{
+  "name": "screenweaver-mcp",
+  "version": "1.0.0",
+  "description": "Your screenplay and storyboard in your AI assistant: start a film or series, import Final Draft, Fountain or PDF scripts, edit scenes, and turn scenes, notes, comic pages or hand-drawn boards into storyboard shots in ScreenWeaver. OAuth sign-in; requires a ScreenWeaver account with credits.",
+  "homepage": "https://www.screenweaver.ai/mcp",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OUTERFRAME-STUDIO/screenweaver-mcp"
+  },
+  "license": "MIT"
+}

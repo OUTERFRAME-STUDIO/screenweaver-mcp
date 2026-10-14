@@ -1,0 +1,726 @@
+{
+  "author": "Outerframe Studio",
+  "authorUrl": "https://www.screenweaver.ai",
+  "cloudEndpoint": "https://app.screenweaver.ai/api/mcp",
+  "description": "Your screenplay and storyboard in your AI assistant: start a film or series, import Final Draft, Fountain or PDF scripts, edit scenes, and turn scenes, notes, comic pages or hand-drawn boards into storyboard shots in ScreenWeaver. OAuth sign-in; requires a ScreenWeaver account with credits.",
+  "homepage": "https://www.screenweaver.ai/mcp",
+  "identifier": "screenweaver",
+  "name": "ScreenWeaver",
+  "prompts": [],
+  "resources": [],
+  "tools": [
+    {
+      "name": "list_projects",
+      "title": "List projects",
+      "description": "List the ScreenWeaver projects you can open (owned or shared with you), most recently updated first, with your role, aspect ratio and last update.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "list_organisations",
+      "title": "List organisations",
+      "description": "List the organisations where you can create projects (you are an owner or editor there). Call it before create_project.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_project_outline",
+      "title": "Get project outline",
+      "description": "Overview of one project: title, aspect ratio, counts, and the script's episodes with their scenes in order (sceneId, heading, shot count).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "get_scene",
+      "title": "Get scene",
+      "description": "Read one scene of the screenplay, element by element, with linked characters and place, and optionally its storyboard shots.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "sceneId": {
+            "type": "string"
+          },
+          "includeShots": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId",
+          "sceneId"
+        ]
+      }
+    },
+    {
+      "name": "search_script",
+      "title": "Search script",
+      "description": "Find screenplay elements whose text contains the query, in script order, with scene and snippet.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "query": {
+            "type": "string"
+          },
+          "types": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "limit": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "projectId",
+          "query"
+        ]
+      }
+    },
+    {
+      "name": "list_entities",
+      "title": "List story elements",
+      "description": "List the project's characters, places and objects, with the reference handle to cite them in shots and optionally their descriptions.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "character",
+              "place",
+              "object"
+            ]
+          },
+          "includeDescriptions": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "list_shots",
+      "title": "List shots",
+      "description": "List the storyboard shots in timeline order with framing, camera movement, duration, action and continuation.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "sceneId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "get_group",
+      "title": "Get group",
+      "description": "Read a group of the production canvas (a shot's storyboard or production group, a story element's group, or the art direction): generators, prompts, references and images.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "target": {
+            "type": "object",
+            "description": "The group: { kind: \"shot\", id: shotId }, { kind: \"story_element\", id: entityId, group }, or { kind: \"art_direction\" }.",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "shot",
+                  "story_element",
+                  "art_direction"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string",
+                "enum": [
+                  "moodboard",
+                  "storyboard",
+                  "production"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "fullPrompts": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId",
+          "target"
+        ]
+      }
+    },
+    {
+      "name": "view_media",
+      "title": "View media",
+      "description": "Look at images stored in the project: imported or generated media, a shot's selected panel, or a canvas node's image.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shotIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nodeIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "maxSize": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "get_guide",
+      "title": "Get guide",
+      "description": "Read a page of the ScreenWeaver guide: script, story elements, storyboard, production, art direction, references, media, generation and credits.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "topic": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "name": "create_project",
+      "title": "Create project",
+      "description": "Create a new ScreenWeaver film (STANDARD) or series (EPISODICAL) project with an empty script, in an organisation where you are owner or editor. Projects cannot be deleted through these tools.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "scriptMode": {
+            "type": "string",
+            "enum": [
+              "STANDARD",
+              "EPISODICAL"
+            ]
+          },
+          "orgId": {
+            "type": "string"
+          },
+          "aspectRatio": {
+            "type": "string",
+            "enum": [
+              "16:9",
+              "9:16",
+              "2.39:1",
+              "4:3",
+              "3:4"
+            ]
+          },
+          "locale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "fr"
+            ]
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "scriptMode"
+        ]
+      }
+    },
+    {
+      "name": "set_project_aspect_ratio",
+      "title": "Set project aspect ratio",
+      "description": "Set the project's frame shape (16:9, 9:16, 2.39:1, 4:3, 3:4), chosen by the user. Needed before storyboard work.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "aspectRatio": {
+            "type": "string",
+            "enum": [
+              "16:9",
+              "9:16",
+              "2.39:1",
+              "4:3",
+              "3:4"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "aspectRatio"
+        ]
+      }
+    },
+    {
+      "name": "import_script",
+      "title": "Import script file",
+      "description": "Import a Final Draft (.fdx), WriterDuet or Fountain script, or the text extracted from a PDF, into the project's script. Preview with dryRun first; the previous script is saved to History.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "content": {
+            "type": "string"
+          },
+          "textId": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string",
+            "enum": [
+              "fdx",
+              "writerduet",
+              "fountain"
+            ]
+          },
+          "insertPosition": {
+            "type": "string",
+            "enum": [
+              "start",
+              "end",
+              "replace"
+            ]
+          },
+          "dryRun": {
+            "type": "boolean"
+          },
+          "entityMap": {
+            "type": "object"
+          },
+          "confirmReplace": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "extract_file_text",
+      "title": "Extract text from files",
+      "description": "Turn a PDF or photos of pages into text, with OCR for scanned pages (about half a credit per page; confirmation above 20 pages). Use before import_script.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "confirm": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "edit_script",
+      "title": "Edit script",
+      "description": "Edit the screenplay with structured insert, update and delete operations. Deletes require confirmDeletes; the pre-edit script is saved to History.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "confirmDeletes": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId",
+          "operations"
+        ]
+      }
+    },
+    {
+      "name": "create_shots",
+      "title": "Create shots",
+      "description": "Create storyboard shots in one scene, in order, with action, framing, camera movement, duration and continuations. No images are generated and no credits are spent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "sceneId": {
+            "type": "string"
+          },
+          "shots": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "insertAfterShotId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "sceneId",
+          "shots"
+        ]
+      }
+    },
+    {
+      "name": "update_shot",
+      "title": "Update shot",
+      "description": "Change one shot's action, framing, camera movement, duration or continuation link. Only the fields you pass change.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "shotId": {
+            "type": "string"
+          },
+          "actionText": {
+            "type": "string"
+          },
+          "shotValue": {
+            "type": "string"
+          },
+          "cameraMovement": {
+            "type": "string"
+          },
+          "durationSeconds": {
+            "type": "number"
+          },
+          "continuesFromShotId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "shotId"
+        ]
+      }
+    },
+    {
+      "name": "delete_shots",
+      "title": "Delete shots",
+      "description": "Delete storyboard shots by id or by scene. Call without confirm for a preview, then with confirm: true once the user agrees.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "shotIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sceneIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confirm": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "create_upload",
+      "title": "Start a file upload",
+      "description": "Start the upload of a PDF or a PNG, JPEG or WebP image (up to 25 MB) for import_media; returns a signed upload URL.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string",
+            "enum": [
+              "application/pdf",
+              "image/png",
+              "image/jpeg",
+              "image/webp"
+            ]
+          }
+        },
+        "required": [
+          "projectId",
+          "fileName",
+          "mimeType"
+        ]
+      }
+    },
+    {
+      "name": "import_media",
+      "title": "Import images and PDF pages",
+      "description": "Bring comic pages, hand-drawn storyboards or reference pictures into the project as images, with optional automatic panel cutting (about 1 credit per page; confirmation above 20 pages) or manual crops.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "uploadId": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "base64": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "mediaId": {
+            "type": "string"
+          },
+          "fileName": {
+            "type": "string"
+          },
+          "pages": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "findPanels": {
+            "type": "boolean"
+          },
+          "crops": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "confirm": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId"
+        ]
+      }
+    },
+    {
+      "name": "add_reference_images",
+      "title": "Add reference images",
+      "description": "Add stored images to a group and connect them to a node, such as a shot's panel generator, a story element or the art direction. No images are generated and no credits are spent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "target": {
+            "type": "object",
+            "description": "The group: { kind: \"shot\", id: shotId }, { kind: \"story_element\", id: entityId, group }, or { kind: \"art_direction\" }.",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "shot",
+                  "story_element",
+                  "art_direction"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string",
+                "enum": [
+                  "moodboard",
+                  "storyboard",
+                  "production"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "mediaIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nodeId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "projectId",
+          "target",
+          "mediaIds"
+        ]
+      }
+    },
+    {
+      "name": "set_prompt",
+      "title": "Set prompt",
+      "description": "Replace the text of a generator's prompt, a text node or a story element's stage body, with its references checked. No images are generated and no credits are spent.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "ScreenWeaver project id (from list_projects)."
+          },
+          "target": {
+            "type": "object",
+            "description": "The group: { kind: \"shot\", id: shotId }, { kind: \"story_element\", id: entityId, group }, or { kind: \"art_direction\" }.",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "shot",
+                  "story_element",
+                  "art_direction"
+                ]
+              },
+              "id": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string",
+                "enum": [
+                  "moodboard",
+                  "storyboard",
+                  "production"
+                ]
+              }
+            },
+            "required": [
+              "kind"
+            ]
+          },
+          "nodeId": {
+            "type": "string"
+          },
+          "promptText": {
+            "type": "string"
+          },
+          "restoreDefault": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "projectId",
+          "target"
+        ]
+      }
+    }
+  ]
+}
