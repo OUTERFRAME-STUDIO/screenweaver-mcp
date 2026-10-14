@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "ai.screenweaver/screenweaver",
+  "title": "ScreenWeaver",
+  "description": "Screenplay and storyboard in your AI assistant: import scripts, edit scenes, build shots.",
+  "repository": {
+    "url": "https://github.com/OUTERFRAME-STUDIO/screenweaver-mcp",
+    "source": "github"
+  },
+  "version": "1.0.0",
+  "websiteUrl": "https://www.screenweaver.ai/mcp",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/OUTERFRAME-STUDIO/screenweaver-mcp/main/logo.png",
+      "mimeType": "image/png",
+      "sizes": ["400x400"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://app.screenweaver.ai/api/mcp"
+    }
+  ]
+}
